@@ -13,7 +13,7 @@ import annotations.CachePut;
  * @author zoza
  * 
  */
-public class CachePutMethodInterceptor extends CacheMethodInterceptor {
+public class CachePutMethodInterceptor extends CacheMethodInterceptor<CachePut> {
 
     public CachePutMethodInterceptor() {
         super(CachePut.class);

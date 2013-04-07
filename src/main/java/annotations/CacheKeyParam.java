@@ -17,5 +17,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 public @interface CacheKeyParam {
+    /**
+     * if part is empty
+     * default Object.toString() returned as a key
+     */
     String part() default "";
 }

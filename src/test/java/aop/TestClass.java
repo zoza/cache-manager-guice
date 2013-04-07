@@ -12,7 +12,7 @@ import annotations.Cacheable;
  */
 public class TestClass {
     @Cacheable
-    public Object testMethod(long num, int count) {
+    public Object testMethod(@CacheKeyParam long num, @CacheKeyParam int count) {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -24,14 +24,14 @@ public class TestClass {
     }
 
     @Cacheable
-    public Object testSimpleMethod(@SuppressWarnings(value = "dd") @Deprecated long num,
+    public Object testSimpleMethod(@SuppressWarnings(value = "dd") @Deprecated @CacheKeyParam Long num,
                                    boolean bool) {
         System.out.println("inside method testSimpleMethod: long:" + num + " bool:" + bool);
         return "long";
     }
 
     @Cacheable
-    public Object testSimpleMethod(@CacheKeyParam(part = "id") @Deprecated TestObject obj) {
+    public Object testSimpleMethod(@CacheKeyParam(part="name") @Deprecated  TestObject obj) {
         System.out.println("inside method testSimpleMethod: TestObject:" + obj.getName());
         return "int";
     }
