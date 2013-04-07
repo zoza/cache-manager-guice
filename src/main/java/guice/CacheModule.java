@@ -4,13 +4,12 @@
 package guice;
 
 import guice.interceptors.CacheEvictMethodInterceptor;
+import guice.interceptors.CachePutMethodInterceptor;
 import guice.interceptors.CacheableMethodInterceptor;
 
 import java.lang.annotation.Annotation;
 
-import aop.TestClass;
 import cache.CacheManager;
-import cache.memcache.MemcacheCacheManager;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
@@ -20,7 +19,15 @@ import com.google.inject.matcher.Matchers;
  * @author zoza
  * 
  */
-public class CacheModule extends AbstractModule {
+public abstract class CacheModule extends AbstractModule {
+
+    /**
+     * you must override this method and return some impl (memcache, ehcache,
+     * hazelcast) or use SimpleCacheModule
+     * 
+     * @return CacheManager impl
+     */
+    protected abstract CacheManager getManager();
 
     /*
      * (non-Javadoc)
@@ -32,25 +39,27 @@ public class CacheModule extends AbstractModule {
         bind(CacheManager.class).toProvider(new Provider<CacheManager>() {
 
             public CacheManager get() {
-                MemcacheCacheManager memcacheCacheManager = new MemcacheCacheManager();
+                CacheManager cacheManager = getManager();
                 try {
-                    memcacheCacheManager.init();
+                    cacheManager.start();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return memcacheCacheManager;
+                return cacheManager;
             }
         }).asEagerSingleton();
 
         CacheableMethodInterceptor cacheableMethodInterceptor = new CacheableMethodInterceptor();
-        CacheEvictMethodInterceptor cacheEvictMethodInterceptor = new CacheEvictMethodInterceptor();
         requestInjection(cacheableMethodInterceptor);
-        requestInjection(cacheEvictMethodInterceptor);
-
         bindInterceptor(cacheableMethodInterceptor);
+        
+        CacheEvictMethodInterceptor cacheEvictMethodInterceptor = new CacheEvictMethodInterceptor();
+        requestInjection(cacheEvictMethodInterceptor);
         bindInterceptor(cacheEvictMethodInterceptor);
-
-        bind(TestClass.class);
+        
+        CachePutMethodInterceptor cachePutMethodInterceptor = new CachePutMethodInterceptor();
+        requestInjection(cachePutMethodInterceptor);
+        bindInterceptor(cachePutMethodInterceptor);
 
     }
 

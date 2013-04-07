@@ -24,14 +24,14 @@ public class TestClass {
     }
 
     @Cacheable
-    public Object testSimpleMethod(@SuppressWarnings(value = "dd") @Deprecated long num,
+    public Object testSimpleMethod(@SuppressWarnings(value = "dd") @Deprecated @CacheKeyParam long num,
                                    boolean bool) {
         System.out.println("inside method testSimpleMethod: long:" + num + " bool:" + bool);
         return "long";
     }
 
     @Cacheable
-    public Object testSimpleMethod(@CacheKeyParam(part = "id") @Deprecated TestObject obj) {
+    public Object testSimpleMethod(@CacheKeyParam(part = "name") @Deprecated  TestObject obj) {
         System.out.println("inside method testSimpleMethod: TestObject:" + obj.getName());
         return "int";
     }
