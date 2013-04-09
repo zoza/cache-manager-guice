@@ -29,8 +29,10 @@ public class TestAop {
         TestClass testClass = injector.getInstance(TestClass.class);
         testClass.testMethod(5, 5);
         testClass.testMethod(7, 1);
-        testClass.testSimpleMethod(null, true);
-        testClass.testSimpleMethod(null, false);
+
+        testClass.testSimpleMethod(5L, true);
+        testClass.testSimpleMethod(5L, false);
+
         testClass.testSimpleMethod(new TestObject("zoza", 10000000000L));
     }
 }
